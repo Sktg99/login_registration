@@ -18,30 +18,32 @@ if(!err) {
 }
 });
 exports.register = async function(req,res){
-    const password = req.body.password;
-    // const encryptedPassword = await bcrypt.hash(password, saltRounds)
-    var users={
-       "user":req.body.email,
-       "password":password
-     }
-    connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
-      if (error) {
-        res.send({
-          "code":400,
-          "failed":"error ocurred"
-        })
-      } else {
-        res.send({
-          "code":200,
-          "success":"user registered sucessfully"
-            });
-        }
-    });
-  }
+  const password = req.body.password;
+  const encryptedPassword = await bcrypt.hash(password, saltRounds)
+
+  var users={
+     "user":req.body.user,
+     "password":encryptedPassword
+   }
+  
+  connection.query('INSERT INTO users1 SET ?',users, function (error, results, fields) {
+    if (error) {
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    } else {
+      res.send({
+        "code":200,
+        "success":"user registered sucessfully"
+          });
+      }
+  });
+}
   exports.login = async function(req,res){
-    var user= req.body.email;
+    var userr= req.body.user;
     var password = req.body.password;
-    connection.query('SELECT * FROM users USER email = ?',[user], async function (error, results, fields) {
+    connection.query('SELECT * FROM users1 WHERE user = ?',[userr], async function (error, results, fields) {
       if (error) {
         res.send({
           "code":400,
@@ -59,14 +61,14 @@ exports.register = async function(req,res){
           else{
             res.send({
                  "code":204,
-                 "success":"user and password does not match"
+                 "success":"Email and password does not match"
             })
           }
         }
         else{
           res.send({
             "code":206,
-            "success":"user does not exits"
+            "success":"Email does not exits"
               });
         }
       }
