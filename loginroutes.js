@@ -1,4 +1,6 @@
 var mysql      = require('mysql');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
